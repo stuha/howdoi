@@ -45,10 +45,13 @@ else:
 
 
 if os.getenv('HOWDOI_DISABLE_SSL'):  # Set http instead of https
-    SEARCH_URL = 'http://www.google.com/search?q=site:{0}%20{1}'
+    # google is locked in China but bing is active.
+    #SEARCH_URL = 'http://www.google.com/search?q=site:{0}%20{1}'
+    SEARCH_URL = 'http://www.bing.com/search?q=site:{0}%20{1}'
     VERIFY_SSL_CERTIFICATE = False
 else:
-    SEARCH_URL = 'https://www.google.com/search?q=site:{0}%20{1}'
+    #SEARCH_URL = 'https://www.goole.com/search?q=site:{0}%20{1}'
+    SEARCH_URL = 'https://www.bing.com/search?q=site:{0}%20{1}'
     VERIFY_SSL_CERTIFICATE = True
 
 URL = os.getenv('HOWDOI_URL') or 'stackoverflow.com'
@@ -95,7 +98,9 @@ def _get_links(query):
     result = _get_result(SEARCH_URL.format(URL, url_quote(query)))
     html = pq(result)
     return [a.attrib['href'] for a in html('.l')] or \
-        [a.attrib['href'] for a in html('.r')('a')]
+        [a.attrib['href'] for a in html('.b_algo')('a')]
+    # used for google
+    #    [a.attrib['href'] for a in html('.r')('a')]
 
 
 def get_link_at_pos(links, position):
